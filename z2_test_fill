@@ -1,0 +1,39 @@
+#!/bin/bash
+
+##
+## Script used with a teracom.cc Ethernet controller TCW121/TCW122
+##
+## I am not affiliated with teracom.cc, these are scripts I needed 
+## for myself that I am releasing in the public domain.
+##
+## ----------------------------------------------------------------
+##
+## In order to experiment with RRD, this i used to fill some values
+##
+
+
+cd `dirname $0`
+./zz_config
+
+start=`date +%s`
+let "start -= 3600"
+let "start -= 3600"
+let "start -= 3600"
+let "start -= 3600"
+let "start -= 3600"
+end=`date +%s`
+
+while [ "$start" -le $end ]; do
+
+    T1=$RANDOM; let T1 "T1 %= 15"; let "T1 += 10"
+    T2=$RANDOM; let T2 "T2 %= 15"; let "T2 += 10"
+    H1=$RANDOM; let H1 "H1 %= 10"; let "H1 += 20"
+    H2=$RANDOM; let H2 "H2 %= 10"; let "H2 += 20"
+    V1=$RANDOM; let V1 "V1 %= 60"
+    V2=$RANDOM; let V2 "V2 %= 60"
+
+    echo rrdtool update $MONDEVRRD "${start}:${T1}:${T2}:${H1}:${H2}:${V1}:${V2}"
+    rrdtool update $MONDEVRRD "${start}:${T1}:${T2}:${H1}:${H2}:${V1}:${V2}"
+
+    let "start += 100"
+done

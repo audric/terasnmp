@@ -1,0 +1,42 @@
+#!/bin/bash
+
+##
+## Script used with a teracom.cc Ethernet controller TCW121/TCW122
+##
+## I am not affiliated with teracom.cc, these are scripts I needed 
+## for myself that I am releasing in the public domain.
+##
+## ----------------------------------------------------------------
+##
+## Single shot read (from device via snmp) and store in the RRD db
+##
+
+cd `dirname $0`
+./zz_config
+
+
+NOW=`date`
+
+D1=`snmpget -v 1 -c public $MONDEV .1.3.6.1.4.1.38783.3.1.0  | cut -d\  -f4 | awk '{ printf("%f\n",$1/10) }'`
+
+D2=`snmpget -v 1 -c public $MONDEV .1.3.6.1.4.1.38783.3.2.0  | cut -d\  -f4 | awk '{ printf("%f\n",$1/10) }'`
+
+V1=`snmpget -v 1 -c public $MONDEV .1.3.6.1.4.1.38783.3.7.0  | cut -d\  -f4 | awk '{ printf("%f\n",$1/10) }'`
+
+V2=`snmpget -v 1 -c public $MONDEV .1.3.6.1.4.1.38783.3.8.0  | cut -d\  -f4 | awk '{ printf("%f\n",$1/10) }'`
+
+T1=`snmpget -v 1 -c public $MONDEV .1.3.6.1.4.1.38783.3.9.0  | cut -d\  -f4 | awk '{ printf("%f\n",$1/10) }'`
+if [ "$T1" == "200.000000" ] ; then let "T1=0"; else let "T1 = T1 / 10"; fi
+
+T2=`snmpget -v 1 -c public $MONDEV .1.3.6.1.4.1.38783.3.10.0 | cut -d\  -f4 | awk '{ printf("%f\n",$1/10) }'`
+if [ "$T2" == "200.000000" ] ; then let "T2=0"; else let "T2 = T2 / 10"; fi
+
+H1=`snmpget -v 1 -c public $MONDEV .1.3.6.1.4.1.38783.3.11.0 | cut -d\  -f4 | awk '{ printf("%f\n",$1/10) }'`
+if [ "$H1" == "200.000000" ] ; then let "H1=0"; else let "H1 = H1 / 10"; fi
+
+H2=`snmpget -v 1 -c public $MONDEV .1.3.6.1.4.1.38783.3.12.0 | cut -d\  -f4 | awk '{ printf("%f\n",$1/10) }'`
+if [ "$H2" == "200.000000" ] ; then let "H2=0"; else let "H2 = H2 / 10"; fi
+
+echo rrdtool update $MONDEVRRD "N:${T1}:${H1}:${T2}:${H2}:${V1}:${V2}"
+rrdtool update $MONDEVRRD "N:${T1}:${T2}:${H1}:${H2}:${V1}:${V2}"
+

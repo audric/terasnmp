@@ -1,0 +1,33 @@
+#!/bin/bash
+
+##
+## Script used with a teracom.cc Ethernet controller TCW121/TCW122
+##
+## I am not affiliated with teracom.cc, these are scripts I needed 
+## for myself that I am releasing in the public domain.
+##
+## ----------------------------------------------------------------
+##
+## Creates the RRD db
+##
+
+cd `dirname $0`
+./zz_config
+
+rrdtool create $MONDEVRRD \
+    --start now-24h \
+    --step 10 \
+    DS:d1:GAUGE:10:0:60 \
+    DS:d2:GAUGE:10:0:60 \
+    DS:v1:GAUGE:10:0:60 \
+    DS:v2:GAUGE:10:0:60 \
+    DS:t1:GAUGE:10:-40:85 \
+    DS:t2:GAUGE:10:-40:85 \
+    DS:h1:GAUGE:10:0:100 \
+    DS:h2:GAUGE:10:0:100 \
+    RRA:MAX:0.5:1:600 \
+    RRA:MAX:0.5:6:700 \
+    RRA:MAX:0.5:24:775 \
+    RRA:MAX:0.5:288:797
+
+echo CREATED: $MONDEVRRD

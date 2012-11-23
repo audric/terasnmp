@@ -1,0 +1,38 @@
+#!/bin/bash
+
+##
+## Script used with a teracom.cc Ethernet controller TCW121/TCW122
+##
+## I am not affiliated with teracom.cc, these are scripts I needed 
+## for myself that I am releasing in the public domain.
+##
+## ----------------------------------------------------------------
+##
+## Create the graph of the last 6 hours of monitoring
+##
+
+cd `dirname $0`
+./zz_config
+
+rrdtool graph $MONDEVPNG              \
+    --title "Last 6 hours" \
+    --start now-6h \
+    --width 900 \
+    --height 300 \
+    --vertical-label "T in Celsius, H in % Relative Humidity, V in Volts" \
+    --x-grid MINUTE:10:HOUR:1:MINUTE:30:0:%X \
+    --slope-mode \
+    --dynamic-labels \
+    DEF:d1=$MONDEVRRD:t1:MAX LINE3:t1#A02000:"T1" \
+    DEF:d2=$MONDEVRRD:t2:MAX LINE3:t2#20A000:"T2" \
+    DEF:v1=$MONDEVRRD:v1:MAX LINE2:v1#2000A0:"V1" \
+    DEF:v2=$MONDEVRRD:v2:MAX LINE2:v2#8000A0:"V2" \
+    DEF:t1=$MONDEVRRD:t1:MAX LINE3:t1#A02000:"T1" \
+    DEF:t2=$MONDEVRRD:t2:MAX LINE3:t2#20A000:"T2" \
+    DEF:h1=$MONDEVRRD:h1:MAX LINE1:h1#A08000:"H1" \
+    DEF:h2=$MONDEVRRD:h2:MAX LINE1:h2#80A000:"H2" \
+    HRULE:28#00FF00:"Max confort temp" \
+    HRULE:15#00FF00:"Min confort temp" \
+
+#    --upper-limit 100 \
+#    --lower-limit -40 \

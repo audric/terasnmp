@@ -12,27 +12,131 @@
 ##
 
 cd `dirname $0`
-./zz_config
+source ./zz_config
 
-rrdtool graph $MONDEVPNG              \
-    --title "Last 6 hours" \
-    --start now-6h \
+rrdtool graph "${MONDEVPNGDIR}${MONDEV}-48h.png"              \
+    --title "Last 48 hours" \
+    --start now-48h \
     --width 900 \
     --height 300 \
     --vertical-label "T in Celsius, H in % Relative Humidity, V in Volts" \
-    --x-grid MINUTE:10:HOUR:1:MINUTE:30:0:%X \
     --slope-mode \
     --dynamic-labels \
-    DEF:d1=$MONDEVRRD:t1:MAX LINE3:t1#A02000:"T1" \
-    DEF:d2=$MONDEVRRD:t2:MAX LINE3:t2#20A000:"T2" \
-    DEF:v1=$MONDEVRRD:v1:MAX LINE2:v1#2000A0:"V1" \
-    DEF:v2=$MONDEVRRD:v2:MAX LINE2:v2#8000A0:"V2" \
-    DEF:t1=$MONDEVRRD:t1:MAX LINE3:t1#A02000:"T1" \
-    DEF:t2=$MONDEVRRD:t2:MAX LINE3:t2#20A000:"T2" \
-    DEF:h1=$MONDEVRRD:h1:MAX LINE1:h1#A08000:"H1" \
-    DEF:h2=$MONDEVRRD:h2:MAX LINE1:h2#80A000:"H2" \
-    HRULE:28#00FF00:"Max confort temp" \
-    HRULE:15#00FF00:"Min confort temp" \
+    --x-grid MINUTE:5:HOUR:1:HOUR:6:0:%X \
+    DEF:d1=$MONDEVRRD:d1:AVERAGE LINE3:d1#A02000:"D1" \
+    DEF:d2=$MONDEVRRD:d2:AVERAGE LINE3:d2#20A000:"D2" \
+    DEF:v1=$MONDEVRRD:v1:AVERAGE LINE2:v1#2000A0:"V1" \
+    DEF:v2=$MONDEVRRD:v2:AVERAGE LINE2:v2#8000A0:"V2" \
+    DEF:t1=$MONDEVRRD:t1:AVERAGE LINE3:t1#A02000:"T1" \
+    DEF:t2=$MONDEVRRD:t2:AVERAGE LINE3:t2#20A000:"T2" \
+    DEF:h1=$MONDEVRRD:h1:AVERAGE LINE1:h1#A08000:"H1" \
+    DEF:h2=$MONDEVRRD:h2:AVERAGE LINE1:h2#80A000:"H2" \
+    VDEF:t1max=t1,MAXIMUM \
+    VDEF:t1avg=t1,AVERAGE \
+    VDEF:t1min=t1,MINIMUM \
+    VDEF:t2max=t2,MAXIMUM \
+    VDEF:t2avg=t2,AVERAGE \
+    VDEF:t2min=t2,MINIMUM \
+    VDEF:h1max=h1,MAXIMUM \
+    VDEF:h1avg=h1,AVERAGE \
+    VDEF:h1min=h1,MINIMUM \
+    VDEF:h2max=h2,MAXIMUM \
+    VDEF:h2avg=h2,AVERAGE \
+    VDEF:h2min=h2,MINIMUM \
+    COMMENT:"\n" \
+    GPRINT:t1max:"T1 max\:%2.1lf" \
+    GPRINT:t1avg:"avg\:%2.1lf" \
+    GPRINT:t1min:"min\:%2.1lf\n" \
+    GPRINT:t2max:"T2 max\:%2.1lf" \
+    GPRINT:t2avg:"avg\:%2.1lf" \
+    GPRINT:t2min:"min\:%2.1lf\n" \
+    GPRINT:h1max:"H1 max\:%2.1lf" \
+    GPRINT:h1avg:"avg\:%2.1lf" \
+    GPRINT:h1min:"min\:%2.1lf\n" \
+    GPRINT:h2max:"H2 max\:%2.1lf" \
+    GPRINT:h2avg:"avg\:%2.1lf" \
+    GPRINT:h2min:"min\:%2.1lf\n"
 
-#    --upper-limit 100 \
-#    --lower-limit -40 \
+rrdtool graph "${MONDEVPNGDIR}${MONDEV}-2m.png"              \
+    --title "Last 2 months" \
+    --start now-2months \
+    --width 900 \
+    --height 300 \
+    --vertical-label "T in Celsius, H in % Relative Humidity, V in Volts" \
+    --slope-mode \
+    --dynamic-labels \
+    DEF:d1=$MONDEVRRD:d1:AVERAGE LINE3:d1#A02000:"D1" \
+    DEF:d2=$MONDEVRRD:d2:AVERAGE LINE3:d2#20A000:"D2" \
+    DEF:v1=$MONDEVRRD:v1:AVERAGE LINE2:v1#2000A0:"V1" \
+    DEF:v2=$MONDEVRRD:v2:AVERAGE LINE2:v2#8000A0:"V2" \
+    DEF:t1=$MONDEVRRD:t1:AVERAGE LINE3:t1#A02000:"T1" \
+    DEF:t2=$MONDEVRRD:t2:AVERAGE LINE3:t2#20A000:"T2" \
+    DEF:h1=$MONDEVRRD:h1:AVERAGE LINE1:h1#A08000:"H1" \
+    DEF:h2=$MONDEVRRD:h2:AVERAGE LINE1:h2#80A000:"H2" \
+    VDEF:t1max=t1,MAXIMUM \
+    VDEF:t1avg=t1,AVERAGE \
+    VDEF:t1min=t1,MINIMUM \
+    VDEF:t2max=t2,MAXIMUM \
+    VDEF:t2avg=t2,AVERAGE \
+    VDEF:t2min=t2,MINIMUM \
+    VDEF:h1max=h1,MAXIMUM \
+    VDEF:h1avg=h1,AVERAGE \
+    VDEF:h1min=h1,MINIMUM \
+    VDEF:h2max=h2,MAXIMUM \
+    VDEF:h2avg=h2,AVERAGE \
+    VDEF:h2min=h2,MINIMUM \
+    COMMENT:"\n" \
+    GPRINT:t1max:"T1 max\:%2.1lf" \
+    GPRINT:t1avg:"avg\:%2.1lf" \
+    GPRINT:t1min:"min\:%2.1lf\n" \
+    GPRINT:t2max:"T2 max\:%2.1lf" \
+    GPRINT:t2avg:"avg\:%2.1lf" \
+    GPRINT:t2min:"min\:%2.1lf\n" \
+    GPRINT:h1max:"H1 max\:%2.1lf" \
+    GPRINT:h1avg:"avg\:%2.1lf" \
+    GPRINT:h1min:"min\:%2.1lf\n" \
+    GPRINT:h2max:"H2 max\:%2.1lf" \
+    GPRINT:h2avg:"avg\:%2.1lf" \
+    GPRINT:h2min:"min\:%2.1lf\n"
+
+rrdtool graph "${MONDEVPNGDIR}${MONDEV}-2y.png"              \
+    --title "Last 2 years" \
+    --start now-2years \
+    --width 900 \
+    --height 300 \
+    --vertical-label "T in Celsius, H in % Relative Humidity, V in Volts" \
+    --slope-mode \
+    --dynamic-labels \
+    DEF:d1=$MONDEVRRD:d1:AVERAGE LINE3:d1#A02000:"D1" \
+    DEF:d2=$MONDEVRRD:d2:AVERAGE LINE3:d2#20A000:"D2" \
+    DEF:v1=$MONDEVRRD:v1:AVERAGE LINE2:v1#2000A0:"V1" \
+    DEF:v2=$MONDEVRRD:v2:AVERAGE LINE2:v2#8000A0:"V2" \
+    DEF:t1=$MONDEVRRD:t1:AVERAGE LINE3:t1#A02000:"T1" \
+    DEF:t2=$MONDEVRRD:t2:AVERAGE LINE3:t2#20A000:"T2" \
+    DEF:h1=$MONDEVRRD:h1:AVERAGE LINE1:h1#A08000:"H1" \
+    DEF:h2=$MONDEVRRD:h2:AVERAGE LINE1:h2#80A000:"H2" \
+    VDEF:t1max=t1,MAXIMUM \
+    VDEF:t1avg=t1,AVERAGE \
+    VDEF:t1min=t1,MINIMUM \
+    VDEF:t2max=t2,MAXIMUM \
+    VDEF:t2avg=t2,AVERAGE \
+    VDEF:t2min=t2,MINIMUM \
+    VDEF:h1max=h1,MAXIMUM \
+    VDEF:h1avg=h1,AVERAGE \
+    VDEF:h1min=h1,MINIMUM \
+    VDEF:h2max=h2,MAXIMUM \
+    VDEF:h2avg=h2,AVERAGE \
+    VDEF:h2min=h2,MINIMUM \
+    COMMENT:"\n" \
+    GPRINT:t1max:"T1 max\:%2.1lf" \
+    GPRINT:t1avg:"avg\:%2.1lf" \
+    GPRINT:t1min:"min\:%2.1lf\n" \
+    GPRINT:t2max:"T2 max\:%2.1lf" \
+    GPRINT:t2avg:"avg\:%2.1lf" \
+    GPRINT:t2min:"min\:%2.1lf\n" \
+    GPRINT:h1max:"H1 max\:%2.1lf" \
+    GPRINT:h1avg:"avg\:%2.1lf" \
+    GPRINT:h1min:"min\:%2.1lf\n" \
+    GPRINT:h2max:"H2 max\:%2.1lf" \
+    GPRINT:h2avg:"avg\:%2.1lf" \
+    GPRINT:h2min:"min\:%2.1lf\n"

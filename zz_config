@@ -12,4 +12,5 @@
 
 MONDEV=teracom
 MONDEVRRD=/var/www/$MONDEV.rrd
-MONDEVPNG=/var/www/$MONDEV.png
+MONDEVPNGDIR=/var/www/
+

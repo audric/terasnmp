@@ -13,27 +13,40 @@
 
 
 cd `dirname $0`
-./zz_config
+source ./zz_config
 
 start=`date +%s`
-let "start -= 3600"
-let "start -= 3600"
-let "start -= 3600"
-let "start -= 3600"
-let "start -= 3600"
+let "start -= 43200"
+let "start -= 43200"
+let "start -= 43200"
+let "start -= 43200"
+let "start -= 43200"
+let "start -= 43200"
+let "start -= 43200"
+let "start -= 43200"
+let "start -= 43200"
+let "start -= 43200"
+let "start -= 43200"
+let "start -= 43200"
+let "start -= 43200"
+let "start -= 43200"
+let "start -= 43200"
+let "start -= 43200"
 end=`date +%s`
 
 while [ "$start" -le $end ]; do
 
+    D1=$RANDOM; let D1 "D1 %= 1"
+    D2=$RANDOM; let D2 "D2 %= 1"
+    V1=$RANDOM; let V1 "V1 %= 60"
+    V2=$RANDOM; let V2 "V2 %= 60"
     T1=$RANDOM; let T1 "T1 %= 15"; let "T1 += 10"
     T2=$RANDOM; let T2 "T2 %= 15"; let "T2 += 10"
     H1=$RANDOM; let H1 "H1 %= 10"; let "H1 += 20"
     H2=$RANDOM; let H2 "H2 %= 10"; let "H2 += 20"
-    V1=$RANDOM; let V1 "V1 %= 60"
-    V2=$RANDOM; let V2 "V2 %= 60"
 
-    echo rrdtool update $MONDEVRRD "${start}:${T1}:${T2}:${H1}:${H2}:${V1}:${V2}"
-    rrdtool update $MONDEVRRD "${start}:${T1}:${T2}:${H1}:${H2}:${V1}:${V2}"
+    echo rrdtool update $MONDEVRRD "${start}:${D1}:${D2}:${T1}:${T2}:${H1}:${H2}:${V1}:${V2}"
+    rrdtool update $MONDEVRRD "${start}:${D1}:${D2}:${T1}:${T2}:${H1}:${H2}:${V1}:${V2}"
 
-    let "start += 100"
+    let "start += 300"
 done
